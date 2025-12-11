@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Fatura Oluşturucu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>PDF Fatura Oluşturucu</h1>
+            <p>Profesyonel faturalarınızı kolayca oluşturun</p>
+        </header>
+
+        <form id="invoiceForm" enctype="multipart/form-data">
+            <section class="company-section">
+                <h2>Firma Bilgileri</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="company_name">Firma Adı *</label>
+                        <input type="text" id="company_name" name="company_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tax_office">Vergi Dairesi *</label>
+                        <input type="text" id="tax_office" name="tax_office" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company_address">Adres *</label>
+                        <input type="text" id="company_address" name="company_address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tax_number">Vergi Numarası *</label>
+                        <input type="text" id="tax_number" name="tax_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-posta *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="form-group logo-upload">
+                    <label for="logo">Firma Logosu (PNG/JPG)</label>
+                    <input type="file" id="logo" name="logo" accept="image/png,image/jpeg">
+                    <span class="file-info">Maksimum 5MB</span>
+                </div>
+            </section>
+
+            <section class="products-section">
+                <div class="section-header">
+                    <h2>Ürün/Hizmet Bilgileri</h2>
+                    <button type="button" id="addProductBtn" class="btn-add">+ Ürün Ekle</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <th>Ürün/Hizmet Adı</th>
+                                <th>Miktar</th>
+                                <th>Birim Fiyat (₺)</th>
+                                <th>KDV %</th>
+                                <th>Toplam (₺)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody">
+                            <tr class="product-row">
+                                <td><input type="text" class="product-name" placeholder="Ürün adı" required></td>
+                                <td><input type="number" class="product-quantity" min="1" value="1" step="0.01" required></td>
+                                <td><input type="number" class="product-price" min="0" step="0.01" placeholder="0.00" required></td>
+                                <td>
+                                    <select class="product-kdv">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="8">8</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                </td>
+                                <td class="product-total">0.00</td>
+                                <td><button type="button" class="btn-remove" onclick="removeProduct(this)">×</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="summary-section">
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Ara Toplam:</span>
+                        <span id="subtotal">0.00 ₺</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>KDV Toplamı:</span>
+                        <span id="totalKdv">0.00 ₺</span>
+                    </div>
+                    <div class="summary-row grand-total">
+                        <span>GENEL TOPLAM:</span>
+                        <span id="grandTotal">0.00 ₺</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">PDF Oluştur</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>PDF oluşturuluyor...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
